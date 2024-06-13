@@ -19,7 +19,6 @@ import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.nd4j.linalg.learning.config.Adam;
 
-
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
