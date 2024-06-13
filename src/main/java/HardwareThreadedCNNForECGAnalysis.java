@@ -15,9 +15,10 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
-import org.nd4j.linalg.evaluation.classification.Evaluation;
-import org.nd4j.linalg.learning.config.Adam;
+import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
+import org.nd4j.linalg.learning.config.Adam;
+
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -35,10 +36,10 @@ public class HardwareThreadedCNNForECGAnalysis {
         int numThreads = Runtime.getRuntime().availableProcessors();  // Use available processors
 
         RecordReader rrTrain = new CSVRecordReader(numLinesToSkip, delimiter);
-        rrTrain.initialize(new FileSplit(new File("/../../ECG Classification Dataset/train_ecg_data.csv")));
+        rrTrain.initialize(new FileSplit(new File("ECG Classification Dataset/train_ecg_data.csv")));
 
         RecordReader rrTest = new CSVRecordReader(numLinesToSkip, delimiter);
-        rrTest.initialize(new FileSplit(new File("/../../ECG Classification Dataset/test_ecg_data.csv")));
+        rrTest.initialize(new FileSplit(new File("ECG Classification Dataset/test_ecg_data.csv")));
 
         DataSetIterator trainIter = new RecordReaderDataSetIterator(rrTrain, batchSize, labelIndex, numClasses);
         DataSetIterator testIter = new RecordReaderDataSetIterator(rrTest, batchSize, labelIndex, numClasses);
