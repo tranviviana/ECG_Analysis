@@ -41,7 +41,7 @@ public class SequentialAlgorithm {
 
                 RecordReader rrTrain = new CSVRecordReader(numLinesToSkip, delimiter);
                 rrTrain.initialize(new FileSplit(new File("path/to/train/ecg_data.csv")));
-                RecordReader rrTest = new CSVRecordReader(numLinesToSkip, delimiter);
+                RecordBReader rrTest = new CSVRecordReader(numLinesToSkip, delimiter);
                 rrTest.initialize(new FileSplit(new File("path/to/test/ecg_data.csv")));
                 DataSetIterator trainIter = new RecordReaderDataSetIterator(rrTrain, batchSize, labelIndex, numClasses);
                 DataSetIterator testIter = new RecordReaderDataSetIterator(rrTest, batchSize, labelIndex, numClasses);
