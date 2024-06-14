@@ -170,7 +170,7 @@ public static double[] softmaxGradient(double[] predictions, int label) {
         for (int i = 0; i < weights.length; i++) {
             biases[i] -= learningRate * gradients[i];
             for (int j = 0; j < weights[0].length; j++) {
-                weights[i][j] -= learningRate * gradients[i] * inputs[j];
+                weights[i][j] -= learningRate * gradients[i]; // * inputs[j];
             }
         }
     }

@@ -170,10 +170,14 @@ public class Utils {
 
     // Update weights using gradient descent
     public static void updateWeights(double[][] weights, double[] biases, double[] gradients, double[] inputs, double learningRate) {
+//        System.out.println(weights.length);
+//        System.out.println(weights[0].length);
+//        System.out.println(gradients.length);
+//        System.out.println(inputs.length);
         for (int i = 0; i < weights.length; i++) {
             biases[i] -= learningRate * gradients[i];
             for (int j = 0; j < weights[0].length; j++) {
-                weights[i][j] -= learningRate * gradients[i] * inputs[j];
+                weights[i][j] -= learningRate * gradients[i];// * inputs[j];
             }
         }
     }
