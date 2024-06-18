@@ -1,9 +1,11 @@
 package Sequential;
 
+import java.io.FileWriter;
 import java.util.Random;
 
-class Utils {
 
+
+class Utils {
     // Generate a random weight matrix
     public static double[][] generateRandomMatrix(int rows, int cols) {
         Random random = new Random();
@@ -277,53 +279,65 @@ class CNN {
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        CNN cnn = new CNN();
+        FileWriter randomSeeds = new FileWriter("./src/main/java/Sequential/SequentialSeeds.txt");
 
-        // Dummy data for training
-        double[][][] trainData = new double[1000][28][28]; // 1000 samples of 28x28 ECG data
-        int[] trainLabels = new int[1000]; // Corresponding labels
-        Random random = new Random();
+        for(int v = 0; v < 12; v++) {
+            CNN cnn = new CNN();
+            // Dummy data for training
+            double[][][] trainData = new double[1000][28][28]; // 1000 samples of 28x28 ECG data
+            int[] trainLabels = new int[1000]; // Corresponding labels
+            Random random = new Random();
+            System.out.println(random);
+            randomSeeds.write(random.toString());
+            randomSeeds.write("\r\n");
 
-        for (int i = 0; i < trainData.length; i++) {
-            for (int j = 0; j < 28; j++) {
-                for (int k = 0; k < 28; k++) {
-                    trainData[i][j][k] = random.nextDouble();
-                }
-            }
-            trainLabels[i] = random.nextInt(10); // Random label from 0 to 9
-        }
 
-        // Training loop
-        int epochs = 10;
-        double learningRate = 0.01;
 
-        for (int epoch = 0; epoch < epochs; epoch++) {
-            double totalLoss = 0.0;
             for (int i = 0; i < trainData.length; i++) {
-                double[] predictions = cnn.forward(trainData[i]);
-                totalLoss += Utils.crossEntropyLoss(predictions, trainLabels[i]);
-                cnn.backward(trainData[i], trainLabels[i], learningRate);
+                for (int j = 0; j < 28; j++) {
+                    for (int k = 0; k < 28; k++) {
+                        trainData[i][j][k] = random.nextDouble();
+                    }
+                }
+                trainLabels[i] = random.nextInt(10); // Random label from 0 to 9
             }
-            System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
-        }
 
-        // Evaluation on test data would go here
-        // Generate random test ECG data
-        double[][][] testData = new double[100][28][28]; // 100 samples of 28x28 ECG data
-        random = new Random();
+            // Training loop
+            int epochs = 10;
+            double learningRate = 0.01;
 
-        for (int i = 0; i < testData.length; i++) {
-            for (int j = 0; j < 28; j++) {
-                for (int k = 0; k < 28; k++) {
-                    testData[i][j][k] = random.nextDouble();
+            for (int epoch = 0; epoch < epochs; epoch++) {
+                double totalLoss = 0.0;
+                for (int i = 0; i < trainData.length; i++) {
+                    double[] predictions = cnn.forward(trainData[i]);
+                    totalLoss += Utils.crossEntropyLoss(predictions, trainLabels[i]);
+                    cnn.backward(trainData[i], trainLabels[i], learningRate);
+                }
+                System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
+            }
+
+            // Evaluation on test data would go here
+            // Generate random test ECG data
+            double[][][] testData = new double[100][28][28]; // 100 samples of 28x28 ECG data
+            random = new Random();
+
+            for (int i = 0; i < testData.length; i++) {
+                for (int j = 0; j < 28; j++) {
+                    for (int k = 0; k < 28; k++) {
+                        testData[i][j][k] = random.nextDouble();
+                    }
                 }
             }
+
+            // Classify test data
+            for (int i = 0; i < testData.length; i++) {
+                int predictedLabel = cnn.classify(testData[i]);
+                System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
+            }
         }
 
-        // Classify test data
-        for (int i = 0; i < testData.length; i++) {
-            int predictedLabel = cnn.classify(testData[i]);
-            System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
-        }
+
+        randomSeeds.close();
+
     }
 }
