@@ -323,7 +323,7 @@ class CNN {
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        FileWriter randomSeeds = new FileWriter("./src/main/java/Sequential/SequentialSeeds.txt");
+        FileWriter randomSeeds = new FileWriter("./src/main/java/Threaded/ThreadedSeeds.txt");
 
 
         for (int v = 0; v < 12; v++) {
