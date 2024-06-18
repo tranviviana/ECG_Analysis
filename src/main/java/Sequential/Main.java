@@ -287,7 +287,6 @@ public class Main {
             double[][][] trainData = new double[1000][28][28]; // 1000 samples of 28x28 ECG data
             int[] trainLabels = new int[1000]; // Corresponding labels
             Random random = new Random();
-            System.out.println(random);
             randomSeeds.write(random.toString());
             randomSeeds.write("\r\n");
 
