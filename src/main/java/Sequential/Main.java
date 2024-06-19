@@ -281,7 +281,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         FileWriter sequentialEpochFile = new FileWriter("./src/main/java/Sequential/SequentialEpoch.txt");
 
-        for(int v = 0; v < 12; v++) {
+        for(int v = 0; v < 100; v++) {
             CNN cnn = new CNN();
             // Dummy data for training
             double[][][] trainData = new double[1000][28][28]; // 1000 samples of 28x28 ECG data

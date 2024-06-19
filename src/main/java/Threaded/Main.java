@@ -326,7 +326,7 @@ public class Main {
         FileWriter threadedEpoch = new FileWriter("./src/main/java/Threaded/ThreadedEpoch.txt");
 
 
-        for (int v = 0; v < 12; v++) {
+        for (int v = 0; v < 100; v++) {
             int numThreads = Runtime.getRuntime().availableProcessors();
             CNN cnn = new CNN(numThreads);
 
