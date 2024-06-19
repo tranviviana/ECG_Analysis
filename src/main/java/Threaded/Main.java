@@ -323,12 +323,12 @@ class CNN {
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        FileWriter threadedEpoch = new FileWriter("./src/main/java/Threaded/ThreadedEpoch.txt");
+        FileWriter trainingThreFile = new FileWriter("./src/main/java/Threaded/trainingThreadedFile.txt");
+        FileWriter testingThreFile = new FileWriter("./src/main/java/Threaded/testingThreadedFile.txt");
 
 
         for (int v = 0; v < 100; v++) {
-            int numThreads = Runtime.getRuntime().availableProcessors();
-            CNN cnn = new CNN(numThreads);
+
 
 
             // Dummy data for training
@@ -347,6 +347,9 @@ public class Main {
             }
 
             // Training loop
+            long trainingStart = System.nanoTime();
+            int numThreads = Runtime.getRuntime().availableProcessors();
+            CNN cnn = new CNN(numThreads);
             int epochs = 10;
             double learningRate = 0.01;
 
@@ -358,9 +361,11 @@ public class Main {
                     cnn.backward(trainData[i], trainLabels[i], learningRate);
                 }
                 //System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
-                threadedEpoch.write(String.valueOf(totalLoss / trainData.length));
-                threadedEpoch.write(" ");
             }
+            long trainingEnd = System.nanoTime();
+            long trainingDuration = (trainingEnd - trainingStart) / 1_000_000;  // Convert to milliseconds
+            trainingThreFile.write(String.valueOf(trainingDuration));
+            trainingThreFile.write(" ");
 
             // Generate random test ECG data
             double[][][] testData = new double[100][28][28]; // 100 samples of 28x28 ECG data
@@ -375,15 +380,22 @@ public class Main {
             }
 
             // Classify test data
+            long testingStart = System.nanoTime();
             for (int i = 0; i < testData.length; i++) {
                 int predictedLabel = cnn.classify(testData[i]);
                 //System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
             }
+            long testingEnd = System.nanoTime();
+            long testingDuration = (testingEnd - testingStart) / 1_000_000;  // Convert to milliseconds
+            testingThreFile.write(String.valueOf(testingDuration));
+            testingThreFile.write(" ");
 
             cnn.shutdown();
             //another test generated occurs here
-            threadedEpoch.write("\r\n");
+            testingThreFile.write("\r\n");
+            trainingThreFile.write("\r\n");
         }
-        threadedEpoch.close();
+        testingThreFile.close();
+        trainingThreFile.close();
     }
 }

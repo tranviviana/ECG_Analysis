@@ -279,70 +279,82 @@ class CNN {
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        FileWriter sequentialEpochFile = new FileWriter("./src/main/java/Sequential/SequentialEpoch.txt");
+        FileWriter trainingSeqFile = new FileWriter("./src/main/java/Sequential/trainingSequentialFile.txt");
+        FileWriter testingSeqFile = new FileWriter("./src/main/java/Sequential/testingSequentialFile.txt");
 
-        for(int v = 0; v < 100; v++) {
-            CNN cnn = new CNN();
-            // Dummy data for training
-            double[][][] trainData = new double[1000][28][28]; // 1000 samples of 28x28 ECG data
-            int[] trainLabels = new int[1000]; // Corresponding labels
-            Random random = new Random();
+            for (int v=0; v < 100; v++) {
+
+                // Dummy data for training
+                double[][][] trainData = new double[1000][28][28]; // 1000 samples of 28x28 ECG data
+                int[] trainLabels = new int[1000]; // Corresponding labels
+                Random random = new Random();
 
 
-
-
-            for (int i = 0; i < trainData.length; i++) {
-                for (int j = 0; j < 28; j++) {
-                    for (int k = 0; k < 28; k++) {
-                        trainData[i][j][k] = random.nextDouble();
-                    }
-                }
-                trainLabels[i] = random.nextInt(10); // Random label from 0 to 9
-            }
-
-            // Training loop
-            int epochs = 10;
-            double learningRate = 0.01;
-
-            for (int epoch = 0; epoch < epochs; epoch++) {
-                double totalLoss = 0.0;
                 for (int i = 0; i < trainData.length; i++) {
-                    double[] predictions = cnn.forward(trainData[i]);
-                    totalLoss += Utils.crossEntropyLoss(predictions, trainLabels[i]);
-                    cnn.backward(trainData[i], trainLabels[i], learningRate);
+                    for (int j = 0; j < 28; j++) {
+                        for (int k = 0; k < 28; k++) {
+                            trainData[i][j][k] = random.nextDouble();
+                        }
+                    }
+                    trainLabels[i] = random.nextInt(10); // Random label from 0 to 9
                 }
-                //System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
-                // 10 epochs per trial
-                sequentialEpochFile.write(String.valueOf(totalLoss / trainData.length));
-                sequentialEpochFile.write(" ");
 
+                // Training loop
+                long trainingStart = System.nanoTime();
+                CNN cnn = new CNN();
+                int epochs = 10;
+                double learningRate = 0.01;
 
-            }
+                for (int epoch = 0; epoch < epochs; epoch++) {
+                    double totalLoss = 0.0;
+                    for (int i = 0; i < trainData.length; i++) {
+                        double[] predictions = cnn.forward(trainData[i]);
+                        totalLoss += Utils.crossEntropyLoss(predictions, trainLabels[i]);
+                        cnn.backward(trainData[i], trainLabels[i], learningRate);
+                    }
+                    double epochCalculated = totalLoss / trainData.length;
+                    //System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
+                    // 10 epochs per trial
+                }
+                long trainingEnd = System.nanoTime();
+                long trainingDuration = (trainingEnd - trainingStart) / 1_000_000;  // Convert to milliseconds
+                trainingSeqFile.write(String.valueOf(trainingDuration));
+                trainingSeqFile.write(" ");
 
-            // Evaluation on test data would go here
-            // Generate random test ECG data
-            double[][][] testData = new double[100][28][28]; // 100 samples of 28x28 ECG data
-            random = new Random();
+                // Evaluation on test data would go here
+                // Generate random test ECG data
+                double[][][] testData = new double[100][28][28]; // 100 samples of 28x28 ECG data
+                random = new Random();
 
-            for (int i = 0; i < testData.length; i++) {
-                for (int j = 0; j < 28; j++) {
-                    for (int k = 0; k < 28; k++) {
-                        testData[i][j][k] = random.nextDouble();
+                for (int i = 0; i < testData.length; i++) {
+                    for (int j = 0; j < 28; j++) {
+                        for (int k = 0; k < 28; k++) {
+                            testData[i][j][k] = random.nextDouble();
+                        }
                     }
                 }
+
+                // Classify test data
+                long testingStart = System.nanoTime();
+                for (int i = 0; i < testData.length; i++) {
+                    int predictedLabel = cnn.classify(testData[i]);
+                    //System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
+                }
+                long testingEnd = System.nanoTime();
+                long testingDuration = (testingEnd - testingStart) / 1_000_000;  // Convert to milliseconds
+                testingSeqFile.write(String.valueOf(testingDuration));
+                testingSeqFile.write(" ");
+
+                testingSeqFile.write("\r\n");
+                trainingSeqFile.write("\r\n");
             }
-
-            // Classify test data
-            for (int i = 0; i < testData.length; i++) {
-                int predictedLabel = cnn.classify(testData[i]);
-                //System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
-            }
-            //another test generated occurs here
-            sequentialEpochFile.write("\r\n");
-        }
+            testingSeqFile.close();
+            trainingSeqFile.close();
 
 
-        sequentialEpochFile.close();
+
+
+
 
     }
 }
