@@ -363,9 +363,8 @@ public class Main {
                 //System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
             }
             long trainingEnd = System.nanoTime();
-            long trainingDuration = (trainingEnd - trainingStart) / 1_000_000;  // Convert to milliseconds
+            double trainingDuration = (double) (trainingEnd - trainingStart) / 1_000_000;  // Convert to milliseconds
             trainingThreFile.write(String.valueOf(trainingDuration));
-            trainingThreFile.write(" ");
 
             // Generate random test ECG data
             double[][][] testData = new double[100][28][28]; // 100 samples of 28x28 ECG data
@@ -386,9 +385,8 @@ public class Main {
                 //System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
             }
             long testingEnd = System.nanoTime();
-            long testingDuration = (testingEnd - testingStart) / 1_000_000;  // Convert to milliseconds
+            double testingDuration = (double) (testingEnd - testingStart) / 1_000_000;  // Convert to milliseconds
             testingThreFile.write(String.valueOf(testingDuration));
-            testingThreFile.write(" ");
 
             cnn.shutdown();
             //another test generated occurs here

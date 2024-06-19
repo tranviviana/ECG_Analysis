@@ -317,9 +317,9 @@ public class Main {
                     // 10 epochs per trial
                 }
                 long trainingEnd = System.nanoTime();
-                long trainingDuration = (trainingEnd - trainingStart) / 1_000_000;  // Convert to milliseconds
+                double trainingDuration = (double) (trainingEnd - trainingStart) / 1_000_000;  // Convert to milliseconds
                 trainingSeqFile.write(String.valueOf(trainingDuration));
-                trainingSeqFile.write(" ");
+
 
                 // Evaluation on test data would go here
                 // Generate random test ECG data
@@ -341,9 +341,8 @@ public class Main {
                     //System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
                 }
                 long testingEnd = System.nanoTime();
-                long testingDuration = (testingEnd - testingStart) / 1_000_000;  // Convert to milliseconds
+                double testingDuration = (double) (testingEnd - testingStart) / 1_000_000;  // Convert to milliseconds
                 testingSeqFile.write(String.valueOf(testingDuration));
-                testingSeqFile.write(" ");
 
                 testingSeqFile.write("\r\n");
                 trainingSeqFile.write("\r\n");
