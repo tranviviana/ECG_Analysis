@@ -300,7 +300,7 @@ public class Main {
                 }
 
                 // Training loop
-                long trainingStart = System.nanoTime();
+                double trainingStart = System.nanoTime();
                 CNN cnn = new CNN();
                 int epochs = 10;
                 double learningRate = 0.01;
@@ -316,7 +316,7 @@ public class Main {
                     //System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
                     // 10 epochs per trial
                 }
-                long trainingEnd = System.nanoTime();
+                double trainingEnd = System.nanoTime();
                 double trainingDuration = (double) (trainingEnd - trainingStart) / 1_000_000;  // Convert to milliseconds
                 trainingSeqFile.write(String.valueOf(trainingDuration));
 
@@ -335,12 +335,12 @@ public class Main {
                 }
 
                 // Classify test data
-                long testingStart = System.nanoTime();
+                double testingStart = System.nanoTime();
                 for (int i = 0; i < testData.length; i++) {
                     int predictedLabel = cnn.classify(testData[i]);
                     //System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
                 }
-                long testingEnd = System.nanoTime();
+                double testingEnd = System.nanoTime();
                 double testingDuration = (double) (testingEnd - testingStart) / 1_000_000;  // Convert to milliseconds
                 testingSeqFile.write(String.valueOf(testingDuration));
 
