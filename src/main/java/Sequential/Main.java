@@ -279,7 +279,7 @@ class CNN {
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        FileWriter randomSeeds = new FileWriter("./src/main/java/Sequential/SequentialSeeds.txt");
+        FileWriter sequentialEpochFile = new FileWriter("./src/main/java/Sequential/SequentialEpoch.txt");
 
         for(int v = 0; v < 12; v++) {
             CNN cnn = new CNN();
@@ -287,8 +287,7 @@ public class Main {
             double[][][] trainData = new double[1000][28][28]; // 1000 samples of 28x28 ECG data
             int[] trainLabels = new int[1000]; // Corresponding labels
             Random random = new Random();
-            randomSeeds.write(random.toString());
-            randomSeeds.write("\r\n");
+
 
 
 
@@ -312,7 +311,12 @@ public class Main {
                     totalLoss += Utils.crossEntropyLoss(predictions, trainLabels[i]);
                     cnn.backward(trainData[i], trainLabels[i], learningRate);
                 }
-                System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
+                //System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
+                // 10 epochs per trial
+                sequentialEpochFile.write(String.valueOf(totalLoss / trainData.length));
+                sequentialEpochFile.write(" ");
+
+
             }
 
             // Evaluation on test data would go here
@@ -331,12 +335,14 @@ public class Main {
             // Classify test data
             for (int i = 0; i < testData.length; i++) {
                 int predictedLabel = cnn.classify(testData[i]);
-                System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
+                //System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
             }
+            //another test generated occurs here
+            sequentialEpochFile.write("\r\n");
         }
 
 
-        randomSeeds.close();
+        sequentialEpochFile.close();
 
     }
 }

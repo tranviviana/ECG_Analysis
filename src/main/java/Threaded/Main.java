@@ -323,7 +323,7 @@ class CNN {
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        FileWriter randomSeeds = new FileWriter("./src/main/java/Threaded/ThreadedSeeds.txt");
+        FileWriter threadedEpoch = new FileWriter("./src/main/java/Threaded/ThreadedEpoch.txt");
 
 
         for (int v = 0; v < 12; v++) {
@@ -335,8 +335,7 @@ public class Main {
             double[][][] trainData = new double[1000][28][28]; // 1000 samples of 28x28 ECG data
             int[] trainLabels = new int[1000]; // Corresponding labels
             Random random = new Random();
-            randomSeeds.write(random.toString());
-            randomSeeds.write("\r\n");
+
 
             for (int i = 0; i < trainData.length; i++) {
                 for (int j = 0; j < 28; j++) {
@@ -358,7 +357,9 @@ public class Main {
                     totalLoss += Utils.crossEntropyLoss(predictions, trainLabels[i]);
                     cnn.backward(trainData[i], trainLabels[i], learningRate);
                 }
-                System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
+                //System.out.println("Epoch " + epoch + " - Loss: " + totalLoss / trainData.length);
+                threadedEpoch.write(String.valueOf(totalLoss / trainData.length));
+                threadedEpoch.write(" ");
             }
 
             // Generate random test ECG data
@@ -376,11 +377,13 @@ public class Main {
             // Classify test data
             for (int i = 0; i < testData.length; i++) {
                 int predictedLabel = cnn.classify(testData[i]);
-                System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
+                //System.out.println("Sample " + i + " - Predicted Label: " + predictedLabel);
             }
 
             cnn.shutdown();
+            //another test generated occurs here
+            threadedEpoch.write("\r\n");
         }
-        randomSeeds.close();
+        threadedEpoch.close();
     }
 }

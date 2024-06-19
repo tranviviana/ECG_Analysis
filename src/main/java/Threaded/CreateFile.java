@@ -6,7 +6,7 @@ import java.io.IOException;
 public class CreateFile {
     public static void main(String[] args) {
         try {
-            File myObj = new File("./src/main/java/Threaded/ThreadedSeeds.txt");
+            File myObj = new File("./src/main/java/Threaded/ThreadedEpoch.txt\"");
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
             } else {
